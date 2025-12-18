@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مساعد العقود الذكية</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="contract-assistant.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">← العودة للمنصة</a>
+            <h1 style="flex: 1; text-align: center; color: var(--primary-color);">مساعد العقود الذكية 🧾</h1>
+            <div></div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="contract-section">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="generate">إنشاء عقد جديد</button>
+                <button class="tab-btn" data-tab="analyze">تحليل عقد</button>
+                <button class="tab-btn" data-tab="templates">قوالب جاهزة</button>
+            </div>
+
+            <!-- Tab 1: Generate Contract -->
+            <div id="generate" class="tab-content active">
+                <h2>إنشاء عقد مخصص</h2>
+                
+                <div class="form-group">
+                    <label>نوع الصفقة:</label>
+                    <select id="dealType">
+                        <option value="">اختر نوع الصفقة</option>
+                        <option value="manufacturing">تصنيع (OEM)</option>
+                        <option value="supply">توريد / إعادة بيع</option>
+                        <option value="sample">عينة / أولي</option>
+                        <option value="bulk">طلب ضخم</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>لغة العقد:</label>
+                    <select id="contractLanguage">
+                        <option value="arabic">عربي</option>
+                        <option value="english">English</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>مستوى العقد:</label>
+                    <select id="contractLevel">
+                        <option value="simple">بسيط (للصفقات الصغيرة)</option>
+                        <option value="professional">احترافي (معياري)</option>
+                        <option value="strict">حازم (حماية قوية)</option>
+                    </select>
+                </div>
+
+                <div class="smart-questions">
+                    <h3>أسئلة ذكية قبل توليد العقد</h3>
+                    
+                    <div class="question">
+                        <label>الكمية المطلوبة:</label>
+                        <input type="number" id="quantity" placeholder="عدد الوحدات">
+                    </div>
+
+                    <div class="question">
+                        <label>السعر (للوحدة):</label>
+                        <div class="input-group">
+                            <input type="number" id="price" placeholder="0.00">
+                            <select id="currency">
+                                <option value="usd">$</option>
+                                <option value="eur">€</option>
+                                <option value="cny">¥</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <label>مدة التسليم:</label>
+                        <input type="text" id="deliveryTime" placeholder="مثال: 30 يوم من الدفع">
+                    </div>
+
+                    <div class="question">
+                        <label>من يتحمل الشحن؟</label>
+                        <select id="shippingResponsibility">
+                            <option value="">اختر</option>
+                            <option value="supplier">المورد (CIF/CFR)</option>
+                            <option value="buyer">المشتري (FOB)</option>
+                            <option value="shared">مشترك</option>
+                        </select>
+                    </div>
+
+                    <div class="question">
+                        <label>هل يوجد شرط تعويض عن الأضرار؟</label>
+                        <select id="compensationClause">
+                            <option value="yes">نعم، أريد حماية قوية</option>
+                            <option value="standard">معياري</option>
+                            <option value="no">لا</option>
+                        </select>
+                    </div>
+
+                    <div class="question">
+                        <label>شرط مخصص آخر (اختياري):</label>
+                        <textarea id="customClause" placeholder="مثال: الدفع بالتقسيط، ضمان سنة واحدة..."></textarea>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="generateContract()">توليد العقد</button>
+            </div>
+
+            <!-- Tab 2: Analyze Contract -->
+            <div id="analyze" class="tab-content">
+                <h2>تحليل عقد موجود</h2>
+                <p>الصق نص العقد أدناه لتحليله والكشف عن البنود الخطرة:</p>
+                
+                <textarea id="contractText" placeholder="الصق نص العقد هنا..."></textarea>
+                <button class="btn btn-primary" onclick="analyzeContract()">تحليل العقد</button>
+
+                <div id="analysisResult" style="display: none; margin-top: 30px;">
+                    <h3>نتائج التحليل:</h3>
+                    <div id="dangerousClauses"></div>
+                    <div id="warningClauses"></div>
+                    <div id="safeClauses"></div>
+                </div>
+            </div>
+
+            <!-- Tab 3: Templates -->
+            <div id="templates" class="tab-content">
+                <h2>قوالس عقود جاهزة</h2>
+                <div class="templates-grid">
+                    <div class="template-card">
+                        <h3>عقد توريد بسيط</h3>
+                        <p>لصفقات التجزئة والكميات الصغيرة</p>
+                        <button class="btn btn-secondary" onclick="loadTemplate('simple-supply')">استخدام القالب</button>
+                    </div>
+                    <div class="template-card">
+                        <h3>عقد تصنيع (OEM)</h3>
+                        <p>للمنتجات المخصصة والعلامات الخاصة</p>
+                        <button class="btn btn-secondary" onclick="loadTemplate('oem')">استخدام القالب</button>
+                    </div>
+                    <div class="template-card">
+                        <h3>عقد عينة</h3>
+                        <p>للطلبات الأولية والاختبارية</p>
+                        <button class="btn btn-secondary" onclick="loadTemplate('sample')">استخدام القالب</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contract Output -->
+        <section id="contractOutput" class="contract-output" style="display: none; margin-top: 50px;">
+            <div class="output-header">
+                <h2>العقد المُولّد</h2>
+                <div class="output-actions">
+                    <button class="btn btn-secondary" onclick="downloadPDF()">📥 تحميل PDF</button>
+                    <button class="btn btn-secondary" onclick="copyToClipboard()">📋 نسخ النص</button>
+                    <button class="btn btn-secondary" onclick="emailContract()">✉️ إرسال بالبريد</button>
+                </div>
+            </div>
+            <div id="contractContent" class="contract-content"></div>
+            <div class="contract-tips">
+                <h3>💡 نصائح قبل الإرسال:</h3>
+                <ul>
+                    <li>✅ تأكد من بيانات الأطراف صحيحة</li>
+                    <li>✅ راجع الأسعار والكميات</li>
+                    <li>✅ تأكد من شروط الدفع والتسليم</li>
+                    <li>✅ احفظ نسخة لديك قبل الإرسال</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 منصة التجار الذكية. جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <script src="contract-assistant.js"></script>
+</body>
+</html>
